@@ -173,3 +173,19 @@ services:
     read_only: true
     hostname: user-simulator
     command: "-d 60 -r 200 -c 2 -h edge-router"
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8081:8080"
+    volumes:
+      - ../../swagger/specs:/usr/share/nginx/html/specs
+    environment:
+      URLS: "[
+          {url: 'specs/catalogue.json', name: 'Catalogue'},
+          {url: 'specs/carts.json', name: 'Carts'},
+          {url: 'specs/users.json', name: 'Users'},
+          {url: 'specs/orders.json', name: 'Orders'},
+          {url: 'specs/payment.json', name: 'Payment'},
+          {url: 'specs/shipping.json', name: 'Shipping'}
+        ]"
+    restart: always
