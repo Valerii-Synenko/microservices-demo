@@ -1,0 +1,113 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Shipping Service API",
+    "description": "Shipping and delivery management",
+    "version": "1.0.0"
+  },
+  "host": "localhost",
+  "basePath": "/",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/shipping": {
+      "get": {
+        "summary": "Get all shipments",
+        "tags": ["Shipping"],
+        "responses": {
+          "200": {
+            "description": "List of shipments",
+            "schema": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/Shipment"}
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new shipment",
+        "tags": ["Shipping"],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": ["orderId", "itemCount"],
+            "properties": {
+              "orderId": {
+                "type": "string",
+                "example": "ORDER123"
+              },
+              "itemCount": {
+                "type": "integer",
+                "example": 3
+              }
+            }
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Shipment created",
+            "schema": {"$ref": "#/definitions/Shipment"}
+          },
+          "400": {"description": "Invalid input"},
+          "500": {"description": "Internal server error"}
+        }
+      }
+    },
+    "/shipping/{id}": {
+      "get": {
+        "summary": "Get shipment by ID",
+        "tags": ["Shipping"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "description": "Shipment ID"
+        }],
+        "responses": {
+          "200": {
+            "description": "Shipment found",
+            "schema": {"$ref": "#/definitions/Shipment"}
+          },
+          "404": {"description": "Shipment not found"}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Shipment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "SHIP123"
+        },
+        "name": {
+          "type": "string",
+          "example": "Standard Delivery"
+        },
+        "orderId": {
+          "type": "string",
+          "example": "ORDER123"
+        },
+        "itemCount": {
+          "type": "integer",
+          "example": 3
+        },
+        "trackingNumber": {
+          "type": "string",
+          "example": "TRACK123456789"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_transit", "delivered"],
+          "example": "in_transit"
+        }
+      }
+    }
+  }
+}

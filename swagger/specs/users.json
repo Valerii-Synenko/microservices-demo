@@ -1,0 +1,277 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "User Service API",
+    "description": "User management and authentication",
+    "version": "1.0.0"
+  },
+  "host": "localhost",
+  "basePath": "/",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/register": {
+      "post": {
+        "summary": "Register new user",
+        "tags": ["Users"],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": ["username", "password", "email"],
+            "properties": {
+              "username": {"type": "string", "example": "testuser"},
+              "password": {"type": "string", "example": "password123"},
+              "email": {"type": "string", "example": "test@example.com"},
+              "firstName": {"type": "string", "example": "John"},
+              "lastName": {"type": "string", "example": "Doe"}
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "User registered successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"}
+              }
+            }
+          },
+          "400": {"description": "Invalid input"},
+          "500": {"description": "Internal server error"}
+        }
+      }
+    },
+    "/login": {
+      "get": {
+        "summary": "User login",
+        "tags": ["Users"],
+        "security": [{"basicAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {"$ref": "#/definitions/User"}
+          },
+          "401": {"description": "Unauthorized"}
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "summary": "Get all customers",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "List of customers",
+            "schema": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/User"}
+            }
+          }
+        }
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "summary": "Get customer by ID",
+        "tags": ["Users"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "Customer found",
+            "schema": {"$ref": "#/definitions/User"}
+          },
+          "404": {"description": "Customer not found"}
+        }
+      },
+      "delete": {
+        "summary": "Delete customer",
+        "tags": ["Users"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": {"description": "Customer deleted"},
+          "404": {"description": "Customer not found"}
+        }
+      }
+    },
+    "/cards": {
+      "get": {
+        "summary": "Get all payment cards",
+        "tags": ["Cards"],
+        "responses": {
+          "200": {
+            "description": "List of cards",
+            "schema": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/Card"}
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add new card",
+        "tags": ["Cards"],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {"$ref": "#/definitions/Card"}
+        }],
+        "responses": {
+          "200": {"description": "Card added successfully"}
+        }
+      }
+    },
+    "/cards/{id}": {
+      "get": {
+        "summary": "Get card by ID",
+        "tags": ["Cards"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "Card found",
+            "schema": {"$ref": "#/definitions/Card"}
+          },
+          "404": {"description": "Card not found"}
+        }
+      },
+      "delete": {
+        "summary": "Delete card",
+        "tags": ["Cards"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": {"description": "Card deleted"}
+        }
+      }
+    },
+    "/addresses": {
+      "get": {
+        "summary": "Get all addresses",
+        "tags": ["Addresses"],
+        "responses": {
+          "200": {
+            "description": "List of addresses",
+            "schema": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/Address"}
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add new address",
+        "tags": ["Addresses"],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {"$ref": "#/definitions/Address"}
+        }],
+        "responses": {
+          "200": {"description": "Address added successfully"}
+        }
+      }
+    },
+    "/addresses/{id}": {
+      "get": {
+        "summary": "Get address by ID",
+        "tags": ["Addresses"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "Address found",
+            "schema": {"$ref": "#/definitions/Address"}
+          },
+          "404": {"description": "Address not found"}
+        }
+      },
+      "delete": {
+        "summary": "Delete address",
+        "tags": ["Addresses"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": {"description": "Address deleted"}
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic"
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "username": {"type": "string"},
+        "firstName": {"type": "string"},
+        "lastName": {"type": "string"},
+        "email": {"type": "string"},
+        "addresses": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/Address"}
+        },
+        "cards": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/Card"}
+        }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "street": {"type": "string", "example": "123 Main St"},
+        "number": {"type": "string", "example": "456"},
+        "country": {"type": "string", "example": "USA"},
+        "city": {"type": "string", "example": "New York"},
+        "postcode": {"type": "string", "example": "10001"}
+      }
+    },
+    "Card": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "longNum": {"type": "string", "example": "4111111111111111"},
+        "expires": {"type": "string", "example": "12/25"},
+        "ccv": {"type": "string", "example": "123"}
+      }
+    }
+  }
+}
